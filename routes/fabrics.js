@@ -52,4 +52,12 @@ router.post('/:id', function(req, res, next) {
   });
 });
 
+router.get('/:id/delete', function(req, res, next) {
+  new Fabric({id: req.params.id})
+  .destroy()
+  .then(function(fabric) {
+    res.redirect('/fabrics');
+  });
+});
+
 module.exports = router;

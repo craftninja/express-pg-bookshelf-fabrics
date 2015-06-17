@@ -412,3 +412,22 @@
 
 1. Restart server, and verify functionality in browser
 1. Commit!
+
+#### User can delete fabrics from inventory
+
+1. Add delete button on fabrics index
+  * `a(href="/fabrics/#{fabric.id}/delete" class="btn btn-danger") Delete`
+1. Add delete route to fabrics routes
+
+  ```
+  router.get('/:id/delete', function(req, res, next) {
+    new Fabric({id: req.params.id})
+    .destroy()
+    .then(function(fabric) {
+      res.redirect('/fabrics');
+    });
+  });
+  ```
+
+1. Restart server and verify functionality in browser
+1. Commit!
