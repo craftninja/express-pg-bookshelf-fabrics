@@ -222,3 +222,96 @@
 
 1. Refresh index... you should see the font change. Bootstrap is now loading!
 1. Commit all bootstrap files, then commit the rest of the diffs
+
+#### User can add new fabrics to inventory
+1. Add a new fabric button to fabric index:
+
+  ```
+  div(class='page-header')
+    a(href='/fabrics/new' class='btn btn-success pull-right') Add New Fabric
+    h1 Fabric inventory
+  ```
+
+  * click it... see what happens...
+1. Add route to `routes/fabric.js`:
+
+  ```
+  router.get('/new', function(req, res, next) {
+    res.render('fabrics/new');
+  });
+  ```
+
+  * Restart your server... click that button again... see what happens...
+
+1. Add `views/fabrics/new.jade` with content:
+
+  ```
+  extends ../layout
+
+  block content
+    h1(class="page-header") New Fabric
+
+    ol(class="breadcrumb")
+      li
+        a(href="/fabrics") My Fabric Inventory
+      li(class="active") New
+
+    form(action='/fabrics' method='post' class='form-horizontal')
+
+      div(class='form-group')
+        label(class="col-md-2 control-label") Name
+        div(class='col-md-4')
+          input(type="text" name="fabric[name]" class='form-control')
+
+      div(class='form-group')
+        label(class="col-md-2 control-label") Content
+        div(class='col-md-4')
+          input(type="text" name="fabric[content]" class='form-control')
+
+      div(class="form-group")
+        label(class="col-md-2 control-label") Width (in)
+        div(class="col-md-4")
+          input(type='number' name='fabric[width_in_inches]' class="form-control")
+
+      div(class="form-group")
+        label(class="col-md-2 control-label") Yardage Available
+        div(class="col-md-4")
+          input(type='number' step=0.005 name='fabric[yardage_available]' class="form-control")
+
+      div(class="form-group")
+        div(class="col-md-offset-2 col-md-4")
+          div(class="checkbox")
+          label Is this a domestic fabric?
+            input(type='checkbox' name='fabric[domestic]' class="form-control")
+
+      div(class="form-group")
+        div(class="col-md-offset-2 col-md-4")
+          input(type='submit' name='commit' value='Add this fabric' class="btn btn-success")
+  ```
+
+  * what happens when you fill out the form and push submit button?
+
+1. Add route for creation of new fabric in `routes/fabrics.js`:
+
+  ```
+  router.post('/', function(req, res, next) {
+    Fabric.forge({
+      name: req.body['fabric[name]'],
+      content: req.body['fabric[content]'],
+      width_in_inches: req.body['fabric[width_in_inches]'],
+      yardage_available: req.body['fabric[yardage_available]'],
+      domestic: req.body['fabric[domestic]']
+    })
+    .save()
+    .then(function(fabric) {
+      res.redirect('/fabrics');
+    })
+    .catch(function(err) {
+      return console.error(err);
+    });
+  });
+  ```
+
+  * restart server (EVERY TIME you alter anything other than a view)
+1. Add a new Fabric through your beautifully styled form and BOOM.
+1. Commit

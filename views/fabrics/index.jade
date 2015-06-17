@@ -2,7 +2,9 @@ extends ../layout
 
 block content
 
-  h1(class='page-header') Fabric inventory
+  div(class='page-header')
+    a(href='/fabrics/new' class='btn btn-success pull-right') Add New Fabric
+    h1 Fabric inventory
 
   table(class='table')
     thead
