@@ -1,5 +1,19 @@
 # README!
 
+### Get this party started:
+
+1. Fork, clone, npm install
+1. Create database in PostgreSQL
+  * `$ psql -d postgres`
+  * `=# CREATE DATABASE fabric_app;`
+1. Copy `.env.example` to `.env` and add your connection string (probably just `postgres://localhost/fabric_app`)
+1. Migrate the database
+  * `$ knex migrate:latest`
+
+### Tell me a story about this app...
+
+Imagine that you need to do end of year inventory for your fabric store, Elegant Panther Fabrics. Unfortunately you have no records and are starting from scratch. There are only a few details that you care about for now, namely fabric name, fiber content, width of fabric, yardage available, and if it is a domestic or imported fabric. Name and fiber content are strings, width is an integer representing inches, and yardage will be measured in 1/3rds and 1/8ths. Domestic will be a boolean.
+
 ### How did you create such a lovely creature?
 
 #### Generate express app
@@ -483,3 +497,11 @@
 
 1. Restart server and verify all functionality in browser. RESTfully CRUDtastic!
 1. Commit!
+
+### Ideas for expansion
+
+1. Fabrics (ei. "Canoes") belong to a fabric line ("Shaman")
+1. Fabrics belong to a fabric designer ("Parson Gray")
+1. Fabrics have colorways ("Gourd", "River", "Trail")
+1. Fabrics have a wholesale and retail price (accurate to pennies)
+1. How would you go about making a "register" to cut fabric, calculate pricing, and ring people up? This would need to calculate tax and update inventory as well.
