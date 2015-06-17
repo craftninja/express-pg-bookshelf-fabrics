@@ -153,3 +153,54 @@
 
 1. Stop and restart your server, and visit [http://localhost:3000/](http://localhost:3000/). Click link. Page is loading! Check server logs to see what that looks like as well.
 1. Commit
+
+#### User can see fabrics in database listed on fabric index
+
+1. Add one fabric to database through PostgreSQL CLI:
+  * `INSERT INTO fabrics(name, content, width_in_inches, yardage_available, domestic) VALUES ('Kona Cotton Cerise', 'cotton', 44, 15, true);`
+1. Change fabric index to loop through fabrics:
+
+  ```
+  tbody
+    each fabric in fabrics
+      tr
+        td= fabric.name
+        td= fabric.content
+        td= fabric.width_in_inches
+        td= fabric.yardage_available
+        td= fabric.domestic ? "Domestic" : "Imported"
+  ```
+
+1. Pass fabrics from `routes/fabrics.js` file to view (`fabrics` does not yet reference anything...)
+
+  ```
+  res.render('fabrics/index', {fabrics: fabrics});
+  ```
+
+1. Add model 'app/models/fabric.js' with the following content:
+
+  ```
+  var bookshelf = require('../../db/bookshelf');
+
+  var Fabric = bookshelf.Model.extend({
+      tableName: 'fabrics'
+  });
+
+  module.exports = Fabric;
+  ```
+
+1. Require model in the `routes/fabric.js` file:
+  * `var Fabric = require('../app/models/fabric');`
+1. Add Fabric query to route, saving result to `fabrics`:
+
+  ```
+  router.get('/', function(req, res, next) {
+    Fabric.collection().fetch().then(function(collection) {
+      var fabrics = collection.toJSON();
+      res.render('fabrics/index', {fabrics: fabrics});
+    });
+  });
+  ```
+
+1. Stop and restart your server, and visit [http://localhost:3000/fabrics](http://localhost:3000/fabrics).
+1. Commit
