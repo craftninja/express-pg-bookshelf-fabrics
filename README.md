@@ -431,3 +431,55 @@
 
 1. Restart server and verify functionality in browser
 1. Commit!
+
+#### User can visit fabric show page
+
+1. Change fabric name to link to fabric show page
+
+  ```
+  td
+    a(href="/fabrics/#{fabric.id}")= fabric.name
+  ```
+
+1. Add show route in fabric routes
+
+  ```
+  router.get('/:id', function(req, res, next) {
+    new Fabric({id: req.params.id})
+    .fetch()
+    .then(function(fabric) {
+      res.render('fabrics/show', {fabric: fabric.toJSON()});
+    });
+  });
+  ```
+
+1. Add fabric show page with following content:
+
+  ```
+  extends ../layout
+
+  block content
+    div(class="page-header")
+      div(class="pull-right")
+        a(href='/fabrics/#{fabric.id}/edit' class="btn btn-warning") Edit
+        a(href='/fabrics/#{fabric.id}/delete' class="btn btn-danger") Delete
+      h1= fabric.name
+
+    ol(class="breadcrumb")
+      li
+        a(href="/fabrics") My Fabric Inventory
+      li(class="active")= fabric.name
+
+    dl(class="dl-horizontal")
+      dt Fabric content
+      dd= fabric.content
+      dt Width (inches)
+      dd= fabric.width_in_inches
+      dt Yardage Available
+      dd= fabric.yardage_available
+      dt Domestic or Imported
+      dd= fabric.domestic ? "Domestic" : "Imported"
+  ```
+
+1. Restart server and verify all functionality in browser. RESTfully CRUDtastic!
+1. Commit!

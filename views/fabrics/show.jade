@@ -1,0 +1,23 @@
+extends ../layout
+
+block content
+  div(class="page-header")
+    div(class="pull-right")
+      a(href='/fabrics/#{fabric.id}/edit' class="btn btn-warning") Edit
+      a(href='/fabrics/#{fabric.id}/delete' class="btn btn-danger") Delete
+    h1= fabric.name
+
+  ol(class="breadcrumb")
+    li
+      a(href="/fabrics") My Fabric Inventory
+    li(class="active")= fabric.name
+
+  dl(class="dl-horizontal")
+    dt Fabric content
+    dd= fabric.content
+    dt Width (inches)
+    dd= fabric.width_in_inches
+    dt Yardage Available
+    dd= fabric.yardage_available
+    dt Domestic or Imported
+    dd= fabric.domestic ? "Domestic" : "Imported"

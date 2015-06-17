@@ -17,7 +17,8 @@ block content
     tbody
       each fabric in fabrics
         tr
-          td= fabric.name
+          td
+            a(href="/fabrics/#{fabric.id}")= fabric.name
           td= fabric.content
           td= fabric.width_in_inches
           td= fabric.yardage_available

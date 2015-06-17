@@ -60,4 +60,12 @@ router.get('/:id/delete', function(req, res, next) {
   });
 });
 
+router.get('/:id', function(req, res, next) {
+  new Fabric({id: req.params.id})
+  .fetch()
+  .then(function(fabric) {
+    res.render('fabrics/show', {fabric: fabric.toJSON()});
+  });
+});
+
 module.exports = router;
