@@ -31,4 +31,25 @@ router.post('/', function(req, res, next) {
   });
 });
 
+router.get('/:id/edit', function(req, res, next) {
+  new Fabric({id: req.params.id})
+  .fetch()
+  .then(function(fabric) {
+    res.render('fabrics/edit', {fabric: fabric.toJSON()});
+  });
+});
+
+router.post('/:id', function(req, res, next) {
+  new Fabric({
+    id: req.params.id,
+    name: req.body['fabric[name]'],
+    content: req.body['fabric[content]'],
+    width_in_inches: req.body['fabric[width_in_inches]'],
+    yardage_available: req.body['fabric[yardage_available]'],
+    domestic: req.body['fabric[domestic]']
+  }).save().then(function(fabric) {
+    res.redirect('/fabrics');
+  });
+});
+
 module.exports = router;

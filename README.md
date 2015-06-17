@@ -315,3 +315,100 @@
   * restart server (EVERY TIME you alter anything other than a view)
 1. Add a new Fabric through your beautifully styled form and BOOM.
 1. Commit
+
+#### User can update fabric inventory
+
+1. Add Edit button to fabric index
+
+  ```
+  td
+    a(href="/fabrics/#{fabric.id}/edit" class="btn btn-warning") Edit
+  ```
+
+  * Be sure and add an additional `<th>` to match the <td>... check out the style without and with this additional '<th>'. What is the difference?
+  * Click the button. What are the error messages telling you?
+1. Add edit route to `routes/fabrics.js`
+
+  ```
+  router.get('/:id/edit', function(req, res, next) {
+    new Fabric({id: req.params.id})
+    .fetch()
+    .then(function(fabric) {
+      res.render('fabrics/edit', {fabric: fabric.toJSON()});
+    });
+  });
+  ```
+
+  * Restart server and click the edit button again. What are the error messages telling you now?
+1. Add edit view `views/fabrics/edit.jade`:
+
+  ```
+  extends ../layout
+
+  block content
+    h1(class="page-header") Edit #{fabric.name}
+
+    ol(class="breadcrumb")
+      li
+        a(href="/fabrics") My Fabric Inventory
+      li
+        a(href="/fabrics/#{fabric.id}")= fabric.name
+      li(class="active") Edit
+
+    form(action='/fabrics/#{fabric.id}' method='post' class='form-horizontal')
+
+      div(class='form-group')
+        label(class="col-md-2 control-label") Name
+        div(class='col-md-4')
+          input(type="text" value=fabric.name name="fabric[name]" class='form-control')
+
+      div(class='form-group')
+        label(class="col-md-2 control-label") Content
+        div(class='col-md-4')
+          input(type="text" value=fabric.content name="fabric[content]" class='form-control')
+
+      div(class="form-group")
+        label(class="col-md-2 control-label") Width (in)
+        div(class="col-md-4")
+          input(type='number' value=fabric.width_in_inches name='fabric[width_in_inches]' class="form-control")
+
+      div(class="form-group")
+        label(class="col-md-2 control-label") Yardage Available
+        div(class="col-md-4")
+          input(type='number' step=0.005 value=fabric.yardage_available name='fabric[yardage_available]' class="form-control")
+
+      div(class="form-group")
+        div(class="col-md-offset-2 col-md-4")
+          div(class="checkbox")
+          label Is this a domestic fabric?
+            if fabric.domestic
+              input(type='checkbox' name='fabric[domestic]' class="form-control" checked=fabric.domestic)
+            else
+              input(type='checkbox' name='fabric[domestic]' class="form-control")
+
+      div(class="form-group")
+        div(class="col-md-offset-2 col-md-4")
+          input(type='submit' name='commit' value='Update this fabric' class="btn btn-success")
+  ```
+
+  * Note we added a breadcrumb for a show page... we will implement this later
+  * Fill it out and click the submit button. What is happening?
+1. Add an update route:
+
+  ```
+  router.post('/:id', function(req, res, next) {
+    new Fabric({
+      id: req.params.id,
+      name: req.body['fabric[name]'],
+      content: req.body['fabric[content]'],
+      width_in_inches: req.body['fabric[width_in_inches]'],
+      yardage_available: req.body['fabric[yardage_available]'],
+      domestic: req.body['fabric[domestic]']
+    }).save().then(function(fabric) {
+      res.redirect('/fabrics');
+    });
+  });
+  ```
+
+1. Restart server, and verify functionality in browser
+1. Commit!

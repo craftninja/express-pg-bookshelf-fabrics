@@ -13,6 +13,7 @@ block content
       th Width (inches)
       th Yardage Avail
       th Domestic?
+      th
     tbody
       each fabric in fabrics
         tr
@@ -21,3 +22,5 @@ block content
           td= fabric.width_in_inches
           td= fabric.yardage_available
           td= fabric.domestic ? "Domestic" : "Imported"
+          td
+            a(href="/fabrics/#{fabric.id}/edit" class="btn btn-warning") Edit
