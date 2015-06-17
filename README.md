@@ -105,3 +105,51 @@
     * You should see an empty table
   * IF you ever need to rollback, `$ knex migrate:rollback`
 1. Commit
+
+#### User can visit `/fabrics`
+
+1. Add '/fabric' link to root page `views/index.jade`
+  * `a(href='/fabrics') Check out my awesome fabric inventory`
+1. Stop and restart the server, and refresh browser. Click link. Note what your error message looks like when you do not have a route. Look at the server logs, and note the 404 for `GET /fabrics`
+1. In `app.js`:
+  * Change `var users = require('./routes/users');` to `var fabrics = require('./routes/fabrics');`
+  * Change `app.use('/users', users);` to `app.use('/fabrics', fabrics);`
+1. In `routes` folder, change filename `users.js` to `fabrics.js`
+1. In `fabrics.js`, only route should be changed to:
+
+  ```
+  router.get('/', function(req, res, next) {
+    res.render('fabrics/index');
+  });
+  ```
+
+1. Stop and restart your server, and visit [http://localhost:3000/](http://localhost:3000/). Click link. Note what your error message looks like when you do not have a view. Look at the server logs, and note the 500 for `GET /fabrics`.
+1. Add view for fabric index:
+  * Create file `views/fabrics/index.jade`
+
+    ```
+    extends ../layout
+
+    block content
+
+      h1(class='page-header') Fabric inventory
+
+      table(class='table')
+        thead
+          th Name
+          th Fiber Content
+          th Width (inches)
+          th Yardage Avail
+          th Domestic?
+        tbody
+          tr
+            td
+            td
+            td
+            td
+            td
+
+    ```
+
+1. Stop and restart your server, and visit [http://localhost:3000/](http://localhost:3000/). Click link. Page is loading! Check server logs to see what that looks like as well.
+1. Commit
