@@ -9,6 +9,9 @@
 1. Copy `.env.example` to `.env` and add your connection string (probably just `postgres://localhost/fabric_app`)
 1. Migrate the database
   * `$ knex migrate:latest`
+1. Start the server and start managing your fabric inventory in the browser
+  * `$ DEBUG=fabric-app:* npm start`
+  * [http://localhost:3000/](http://localhost:3000/)
 
 ### Tell me a story about this app...
 
